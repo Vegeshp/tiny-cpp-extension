@@ -8,10 +8,10 @@ Nothing but a c++ compiler which supports `c++11` or higher standard.
 
 ### 1. Get a `.a` static/dynamic linking library
 
-To give an example:
+To give an example(currently in the directory `.../TS/demo`):
 
 ```shell
-g++ -c ftime.cc -static -fPIC -O2 -std=c++11 -o libftime.a
+g++ -c ../src/ftime.cc -I../include/ -static -fPIC -O2 -std=c++11 -o libftime.a
 ```
 
 ### 2. Link in the way you want
@@ -19,7 +19,7 @@ g++ -c ftime.cc -static -fPIC -O2 -std=c++11 -o libftime.a
 Eg.
 
 ```shell
-g++ main.cc -L. -lftime -o a.exe
+g++ main.cc -L. -I../include/ -lftime -o a.exe
 ```
 
 ### 3. Run the executable file
