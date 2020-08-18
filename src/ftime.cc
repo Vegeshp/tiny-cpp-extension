@@ -63,14 +63,10 @@ int64_t TS::s2ts(string s, bool is_milli, int UTC) {
   sregex_iterator begin =
                       sregex_iterator(s.begin(), s.end(), number_format_regex),
                   end = sregex_iterator();
-  tm time;
+  tm t;
   int milli;
-  vector<int *> vec{&(time.tm_year = -1900),
-                    &(time.tm_mon = -1),
-                    &(time.tm_mday = 0),
-                    &(time.tm_hour = 0),
-                    &(time.tm_min = 0),
-                    &(time.tm_sec = 0),
+  vector<int *> vec{&(t.tm_year = -1900), &(t.tm_mon = -1), &(t.tm_mday = 0),
+                    &(t.tm_hour = 0),     &(t.tm_min = 0),  &(t.tm_sec = 0),
                     &(milli = 0)};
   vector<int *>::iterator vec_begin = vec.begin();
   while (begin != end) {
@@ -79,6 +75,6 @@ int64_t TS::s2ts(string s, bool is_milli, int UTC) {
     ++vec_begin;
   }
   vector<int *>().swap(vec);
-  int64_t res = mktime(&time) * 1000LL + milli + UTC * 3600000LL;
+  int64_t res = mktime(&t) * 1000LL + milli + UTC * 3600000LL;
   return res / (is_milli ? 1 : 1000);
 }
