@@ -1,34 +1,26 @@
 #include "ftime.h"
 
-#include <cassert>
 #include <chrono>
-#include <iomanip>
 #include <iterator>
 #include <regex>
-#include <sstream>
-#include <vector>
 
-using std::gmtime;
-using std::mktime;
+using std::map;
 using std::regex;
-using std::regex_search;
-using std::setfill;
-using std::setw;
 using std::sregex_iterator;
-using std::stoi;
 using std::string;
-using std::stringstream;
-using std::tm;
+using std::to_string;
 using std::vector;
 using std::chrono::duration_cast;
 using std::chrono::milliseconds;
 using std::chrono::system_clock;
 using std::chrono::time_point;
 
-const string default_time_format =
-    "([0-9]{1,4})\\/([0-9]{1,2})\\/([0-9]{1,2}) "
-    "([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})(\\.[0-9]{1,3})?";
-// in the format of YYYY/MM/DD HH:MM:SS.MMM
+const map<string, vector<string>> format_string_map = {
+    {"(Wl)",
+     {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+      "Saturday"}},
+    {"(Ws)", {"Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"}}};
+
 regex default_time_format_regex{default_time_format},
     number_format_regex{"([0-9]+)"};
 
@@ -39,34 +31,58 @@ int64_t TS::get_ts(bool to_milli, int UTC) {
          (to_milli ? 1 : 1000);
 }
 
-string TS::ts2s(int64_t timestamp, const string &format_string, bool is_milli,
-                bool to_milli, int UTC) {
+string TS::ts2s(int64_t timestamp, bool is_milli) {
+  return TS::ts2s(timestamp, default_time_format, is_milli);
+}
+
+int64_t TS::s2ts(const string &s, bool to_milli, int UTC) {
+  return s2ts(s, default_time_format, to_milli, UTC);
+}
+
+string TS::ts2s(int64_t timestamp, const string &format_string, bool is_milli) {
   if (!is_milli) {
     timestamp *= 1000;
   }
   const time_t const_time_point = system_clock::to_time_t(
       time_point<system_clock, milliseconds>(milliseconds(timestamp)));
   tm time = *gmtime(&const_time_point);
-  stringstream ss;
-  ss << time.tm_year + 1900 << "/" << time.tm_mon + 1 << "/" << time.tm_mday
-     << " " << time.tm_hour << ":" << setw(2) << setfill('0') << time.tm_min
-     << ":" << setw(2) << setfill('0') << time.tm_sec;
-  if (to_milli) {
-    ss << "." << setw(3) << setfill('0') << timestamp % 1000;
+  map<char, int> mp = {{'Y', time.tm_year + 1900}, {'M', time.tm_mon + 1},
+                       {'D', time.tm_mday},        {'h', time.tm_hour},
+                       {'s', time.tm_sec},         {'W', time.tm_wday}};
+  string res = string(format_string);
+  for (const string &s : formats) {
+    int index = 0;
+    if ((index = res.find(s)) != string::npos) {
+      res.replace(index, s.size(), [&]() -> string {
+        if (s[1] == 'W') {
+          return (*format_string_map.find(s)).second.at(mp['W']);
+        } else if (s == "(m2)") {
+          string res = to_string(time.tm_min);
+          if (res.size() == 1) {
+            return ' ' + res;
+          }
+          return res;
+        } else if (s == "(m3)") {
+          string res = to_string(timestamp % 1000);
+          if (res.size() < 3) {
+            return string(3 - res.size(), '0') + res;
+          }
+          return res;
+        }
+        string res = to_string(mp[s[1]]);
+        int length = s[2] - '0';
+        if (length <= res.size()) {
+          return res;
+        }
+        return string(length - res.size(), '0') + res;
+      }());
+    }
   }
-  return ss.str();
+  return res;
 }
 
-string TS::ts2s(int64_t timestamp, bool is_milli, bool to_milli, int UTC) {
-  return TS::ts2s(timestamp, default_time_format, is_milli, to_milli, UTC);
-}
-
-bool TS::is_ts(const string &s) {
-  return regex_search(s, default_time_format_regex);
-}
-
-int64_t TS::s2ts(string s, bool to_milli, int UTC) {
-  assert(is_ts(s));
+int64_t TS::s2ts(const string &s, const string &format, bool to_milli,
+                 int UTC) {
   sregex_iterator begin =
                       sregex_iterator(s.begin(), s.end(), number_format_regex),
                   end = sregex_iterator();
@@ -82,6 +98,6 @@ int64_t TS::s2ts(string s, bool to_milli, int UTC) {
     ++vec_begin;
   }
   vector<int *>().swap(vec);
-  int64_t res = mktime(&t) * 1000LL + milli + UTC * 3600000LL;
-  return res / (to_milli ? 1 : 1000);
+  return (mktime(&t) * 1000LL + milli + UTC * 3600000LL) /
+         (to_milli ? 1 : 1000);
 }
