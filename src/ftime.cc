@@ -78,6 +78,7 @@ int64_t TS::s2ts(string s, bool is_milli, int UTC) {
     ++begin;
     ++vec_begin;
   }
+  vector<int *>().swap(vec);
   int64_t res = mktime(&time) * 1000LL + milli + UTC * 3600000LL;
   return res / (is_milli ? 1 : 1000);
 }
