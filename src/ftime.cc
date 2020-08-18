@@ -28,6 +28,7 @@ using std::chrono::time_point;
 const string time_format =
     "(\\d{1,4})\\/(\\d{1,2})\\/(\\d{1,2}) "
     "(\\d{1,2}):(\\d{1,2}):(\\d{1,2})(\\.\\d{1,3})?";
+// in the format of YYYY/MM/DD HH:MM:SS.MMM
 const string number_format = "(\\d+)";
 regex time_format_regex{time_format}, number_format_regex{number_format};
 
@@ -55,12 +56,9 @@ string TS::ts2s(int64_t timestamp, bool is_milli, bool to_milli, int UTC) {
   return ss.str();
 }
 
-bool TS::is_ts(const string &s) {
-  return regex_search(s, time_format_regex);
-}
+bool TS::is_ts(const string &s) { return regex_search(s, time_format_regex); }
 
 int64_t TS::s2ts(string s, bool is_milli, int UTC) {
-  // in the format of YYYY/MM/DD HH:MM:SS.MMM
   assert(is_ts(s));
   sregex_iterator begin =
                       sregex_iterator(s.begin(), s.end(), number_format_regex),
