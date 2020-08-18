@@ -25,21 +25,22 @@ using std::chrono::milliseconds;
 using std::chrono::system_clock;
 using std::chrono::time_point;
 
-const string time_format =
-    "(\\d{1,4})\\/(\\d{1,2})\\/(\\d{1,2}) "
-    "(\\d{1,2}):(\\d{1,2}):(\\d{1,2})(\\.\\d{1,3})?";
+const string default_time_format =
+    "([0-9]{1,4})\\/([0-9]{1,2})\\/([0-9]{1,2}) "
+    "([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})(\\.[0-9]{1,3})?";
 // in the format of YYYY/MM/DD HH:MM:SS.MMM
-const string number_format = "(\\d+)";
-regex time_format_regex{time_format}, number_format_regex{number_format};
+regex default_time_format_regex{default_time_format},
+    number_format_regex{"([0-9]+)"};
 
-int64_t TS::get_ts(bool is_milli, int UTC) {
+int64_t TS::get_ts(bool to_milli, int UTC) {
   return (duration_cast<milliseconds>(system_clock::now().time_since_epoch())
               .count() +
           UTC * 3600000LL) /
-         (is_milli ? 1 : 1000);
+         (to_milli ? 1 : 1000);
 }
 
-string TS::ts2s(int64_t timestamp, bool is_milli, bool to_milli, int UTC) {
+string TS::ts2s(int64_t timestamp, const string &format_string, bool is_milli,
+                bool to_milli, int UTC) {
   if (!is_milli) {
     timestamp *= 1000;
   }
@@ -56,9 +57,15 @@ string TS::ts2s(int64_t timestamp, bool is_milli, bool to_milli, int UTC) {
   return ss.str();
 }
 
-bool TS::is_ts(const string &s) { return regex_search(s, time_format_regex); }
+string TS::ts2s(int64_t timestamp, bool is_milli, bool to_milli, int UTC) {
+  return TS::ts2s(timestamp, default_time_format, is_milli, to_milli, UTC);
+}
 
-int64_t TS::s2ts(string s, bool is_milli, int UTC) {
+bool TS::is_ts(const string &s) {
+  return regex_search(s, default_time_format_regex);
+}
+
+int64_t TS::s2ts(string s, bool to_milli, int UTC) {
   assert(is_ts(s));
   sregex_iterator begin =
                       sregex_iterator(s.begin(), s.end(), number_format_regex),
@@ -76,5 +83,5 @@ int64_t TS::s2ts(string s, bool is_milli, int UTC) {
   }
   vector<int *>().swap(vec);
   int64_t res = mktime(&t) * 1000LL + milli + UTC * 3600000LL;
-  return res / (is_milli ? 1 : 1000);
+  return res / (to_milli ? 1 : 1000);
 }
