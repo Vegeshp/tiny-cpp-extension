@@ -1,5 +1,6 @@
 #include "ftime.h"
 
+#include <cassert>
 #include <chrono>
 #include <iterator>
 #include <regex>
@@ -78,6 +79,7 @@ string TS::ts2s(int64_t timestamp, const string &format_string, bool is_milli) {
       }());
     }
   }
+  map<char, int>().swap(mp);
   return res;
 }
 
@@ -88,16 +90,40 @@ int64_t TS::s2ts(const string &s, const string &format, bool to_milli,
                   end = sregex_iterator();
   tm t;
   int milli;
+  vector<std::pair<int, int>> pair_vec;
+  for (const string &type : formats) {
+    if (type[1] == 'W') {
+      break;
+    }
+    int index;
+    if ((index = format.find(type)) != string::npos) {
+      pair_vec.emplace_back(index, pair_vec.size());
+    } else {
+      assert(type != "m3");
+    }
+  }
+  assert(pair_vec.size() >= 6);
+  std::sort(pair_vec.begin(), pair_vec.end());
+  vector<std::pair<int, int>>::iterator pair_vec_it = pair_vec.begin();
+  while (begin != end) {
+    (*pair_vec_it).first = stoi((*begin).str());
+    std::swap((*pair_vec_it).first, (*pair_vec_it).second);
+    ++pair_vec_it;
+    ++begin;
+  }
+  std::sort(pair_vec.begin(), pair_vec.end());
+  pair_vec_it = pair_vec.begin();
   vector<int *> vec{&(t.tm_year = -1900), &(t.tm_mon = -1), &(t.tm_mday = 0),
                     &(t.tm_hour = 0),     &(t.tm_min = 0),  &(t.tm_sec = 0),
                     &(milli = 0)};
   vector<int *>::iterator vec_begin = vec.begin();
-  while (begin != end) {
-    *(*vec_begin) += stoi((*begin).str());
-    ++begin;
+  while (vec_begin != vec.end()) {
+    *(*vec_begin) += (*pair_vec_it).second;
+    ++pair_vec_it;
     ++vec_begin;
   }
   vector<int *>().swap(vec);
+  vector<std::pair<int, int>>().swap(pair_vec);
   return (mktime(&t) * 1000LL + milli + UTC * 3600000LL) /
          (to_milli ? 1 : 1000);
 }

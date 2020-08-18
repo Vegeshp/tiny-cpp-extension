@@ -6,7 +6,7 @@
 const std::string default_time_format =
     "(Y4)/(M2)/(D2) (h2):(m2):(s2).(m3) (Wl)";
 
-const vector<string> formats = {"(Y4)", "(M2)", "(D2)", "(h2)", "(m2)",
+const std::vector<std::string> formats = {"(Y4)", "(M2)", "(D2)", "(h2)", "(m2)",
                                 "(s2)", "(m3)", "(Ws)", "(Wl)"};
 
 class TS {
