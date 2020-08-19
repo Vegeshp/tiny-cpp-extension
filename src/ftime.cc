@@ -124,7 +124,7 @@ int64_t TS::s2ts(const string &s, const string &format, bool to_milli,
     ++vec_begin;
   }
   vector<int *>().swap(vec);
-  vector<std::pair<int, int>>().swap(pair_vec);
+  vector<pair<int, int>>().swap(pair_vec);
   return (mktime(&t) * 1000LL + milli + UTC * 3600000LL) /
          (to_milli ? 1 : 1000);
 }
