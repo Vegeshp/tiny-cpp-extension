@@ -11,7 +11,7 @@ int main() {
   cout << ts << endl;
   string s = TS::ts2s(ts, format, true);
   cout << s << endl;
-  int64_t res = TS::s2ts(s);
+  int64_t res = TS::s2ts(s, format);
   cout << res << endl;
   cout << TS::ts2s(res, format) << endl;
   return 0;

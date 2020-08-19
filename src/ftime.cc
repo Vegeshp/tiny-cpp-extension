@@ -6,7 +6,9 @@
 #include <regex>
 
 using std::map;
+using std::pair;
 using std::regex;
+using std::sort;
 using std::sregex_iterator;
 using std::string;
 using std::to_string;
@@ -22,8 +24,7 @@ const map<string, vector<string>> format_string_map = {
       "Saturday"}},
     {"(Ws)", {"Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"}}};
 
-regex default_time_format_regex{default_time_format},
-    number_format_regex{"([0-9]+)"};
+regex number_format_regex{"([0-9]+)"};
 
 int64_t TS::get_ts(bool to_milli, int UTC) {
   return (duration_cast<milliseconds>(system_clock::now().time_since_epoch())
@@ -89,35 +90,35 @@ int64_t TS::s2ts(const string &s, const string &format, bool to_milli,
                       sregex_iterator(s.begin(), s.end(), number_format_regex),
                   end = sregex_iterator();
   tm t;
-  int milli;
-  vector<std::pair<int, int>> pair_vec;
+  int milli, count = 0;
+  vector<pair<int, int>> pair_vec;
   for (const string &type : formats) {
     if (type[1] == 'W') {
       break;
     }
     int index;
     if ((index = format.find(type)) != string::npos) {
-      pair_vec.emplace_back(index, pair_vec.size());
+      pair_vec.emplace_back(index, ++count);
     } else {
-      assert(type != "m3");
+      assert(type != "(m3)");
     }
   }
   assert(pair_vec.size() >= 6);
-  std::sort(pair_vec.begin(), pair_vec.end());
-  vector<std::pair<int, int>>::iterator pair_vec_it = pair_vec.begin();
-  while (begin != end) {
-    (*pair_vec_it).first = stoi((*begin).str());
-    std::swap((*pair_vec_it).first, (*pair_vec_it).second);
+  sort(pair_vec.begin(), pair_vec.end());
+  vector<pair<int, int>>::iterator pair_vec_it = pair_vec.begin();
+  while (begin != end && pair_vec_it != pair_vec.end()) {
+    (*pair_vec_it).first = (*pair_vec_it).second;
+    (*pair_vec_it).second = stoi((*begin).str());
     ++pair_vec_it;
     ++begin;
   }
-  std::sort(pair_vec.begin(), pair_vec.end());
+  sort(pair_vec.begin(), pair_vec.end());
   pair_vec_it = pair_vec.begin();
   vector<int *> vec{&(t.tm_year = -1900), &(t.tm_mon = -1), &(t.tm_mday = 0),
                     &(t.tm_hour = 0),     &(t.tm_min = 0),  &(t.tm_sec = 0),
                     &(milli = 0)};
   vector<int *>::iterator vec_begin = vec.begin();
-  while (vec_begin != vec.end()) {
+  while (vec_begin != vec.end() && pair_vec_it != pair_vec.end()) {
     *(*vec_begin) += (*pair_vec_it).second;
     ++pair_vec_it;
     ++vec_begin;
