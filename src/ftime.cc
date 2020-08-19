@@ -3,7 +3,7 @@
 #include <cassert>
 #include <chrono>
 #include <iterator>
-#include <regex>
+#include <map>
 
 using std::map;
 using std::pair;
@@ -24,13 +24,13 @@ extern const std::string default_time_format =
 extern const std::vector<std::string> formats = {
     "(Y4)", "(M2)", "(D2)", "(h2)", "(m2)", "(s2)", "(m3)", "(Ws)", "(Wl)"};
 
-const map<string, vector<string>> format_string_map = {
+extern const map<string, vector<string>> format_string_map = {
     {"(Wl)",
      {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
       "Saturday"}},
     {"(Ws)", {"Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"}}};
 
-regex number_format_regex{"([0-9]+)"};
+extern const regex number_format_regex{"([0-9]+)"};
 
 int64_t TS::get_ts(bool to_milli, int UTC) {
   return (duration_cast<milliseconds>(system_clock::now().time_since_epoch())

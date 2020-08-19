@@ -1,10 +1,13 @@
 #pragma once
 
+#include <regex>
 #include <string>
 #include <vector>
 
 extern const std::vector<std::string> formats;
 extern const std::string default_time_format;
+extern const std::map<std::string, std::vector<std::string>> format_string_map;
+extern const regex number_format_regex;
 
 class TS {
  public:
