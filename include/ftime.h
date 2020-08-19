@@ -3,11 +3,8 @@
 #include <string>
 #include <vector>
 
-const std::string default_time_format =
-    "(Y4)/(M2)/(D2) (h2):(m2):(s2).(m3) (Wl)";
-
-const std::vector<std::string> formats = {
-    "(Y4)", "(M2)", "(D2)", "(h2)", "(m2)", "(s2)", "(m3)", "(Ws)", "(Wl)"};
+extern const std::vector<std::string> formats;
+extern const std::string default_time_format;
 
 class TS {
  public:

@@ -18,6 +18,12 @@ using std::chrono::milliseconds;
 using std::chrono::system_clock;
 using std::chrono::time_point;
 
+extern const std::string default_time_format =
+    "(Y4)/(M2)/(D2) (h2):(m2):(s2).(m3) (Wl)";
+
+extern const std::vector<std::string> formats = {
+    "(Y4)", "(M2)", "(D2)", "(h2)", "(m2)", "(s2)", "(m3)", "(Ws)", "(Wl)"};
+
 const map<string, vector<string>> format_string_map = {
     {"(Wl)",
      {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
