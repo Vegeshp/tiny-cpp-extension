@@ -20,7 +20,7 @@ Please read thoroughly if you have no idea what **the license** is.
 
 ### 2. Robusticity
 
-Behavior is not guaranteed when a UB happened.
+Behavior is not guaranteed when an UB happened.
 
 ### 3. Correctness
 
@@ -32,4 +32,4 @@ These functions can be seen clearly on the top few lines in `time_util.cc`.
 
 ### 5. Improve it!
 
-I'd be flattered if you could share the thoughts with me.
+I'd be flattered if you could share the thoughts for improvement with me.
