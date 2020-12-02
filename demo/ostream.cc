@@ -5,7 +5,7 @@
 #include "ostream_util.h"
 
 int main() {
-    std::cout << std::boolalpha << is_iterable<std::string>{}() << std::endl;
+    std::cout << std::boolalpha << ostream_operator_overridable<std::string>{}() << std::endl;
     std::tuple<int, int, int, std::string> tuple{2020, 11, 9, "14:18"};
     std::cout << tuple << std::endl;
     std::vector<int> v{1, 2, 3, 5, 8};
