@@ -6,13 +6,9 @@
 
 int main() {
     std::cout << std::boolalpha << ostream_operator_overridable<std::string>{}() << std::endl;
-    std::tuple<int, int, int, std::string> tuple{2020, 11, 9, "14:18"};
-    std::cout << tuple << std::endl;
-    std::vector<int> v{1, 2, 3, 5, 8};
-    std::cout << v << std::endl;
-    std::map<int, std::pair<int, double>> map{{1, {1, 2.0}}};
-    std::cout << map << std::endl;
-    std::set<int> set{1, 2, 3, 5, 8};
-    std::cout << set << std::endl;
+    std::cout << std::tuple<int, int, int, std::string>{2020, 11, 9, "14:18"} << std::endl;
+    std::cout << std::vector<int>{1, 2, 3, 5, 8} << std::endl;
+    std::cout << std::map<int, std::pair<int, double>>{{1, {1, 2.0}}} << std::endl;
+    std::cout << std::set<int>{1, 2, 3, 5, 8} << std::endl;
     return 0;
 }
