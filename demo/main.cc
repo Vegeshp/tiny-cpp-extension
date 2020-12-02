@@ -16,7 +16,9 @@ int main() {
     cout << s << endl; // test number -> string again
     ts = TimeUtil::s2ts(s);
     cout << ts << endl; // test string -> number again
+
     cout << "======== New Format Again ========" << endl;
+
     string format = "Now the time is (M2)/(D2)/(Y4) (h2):(m2):(s2):(m3).";
     s = TimeUtil::ts2s(ts, true, format); // number -> string
     cout << s << endl;
