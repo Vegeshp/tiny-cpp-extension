@@ -44,7 +44,7 @@ uint64_t TimeUtil::now(int UTC) {
     return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() + UTC * 3600000ULL;
 }
 
-string TimeUtil::ts2s(uint64_t timestamp, bool is_milli, const string &format_string) {
+string TimeUtil::ts2s(uint64_t timestamp, const string &format_string, bool is_milli) {
     if (!is_milli) {
         timestamp *= 1000;
     }
@@ -84,7 +84,7 @@ string TimeUtil::ts2s(uint64_t timestamp, bool is_milli, const string &format_st
     return res;
 }
 
-uint64_t TimeUtil::s2ts(const string &s, bool to_milli, int UTC, const string &format) {
+uint64_t TimeUtil::s2ts(const string &s, const string &format, bool to_milli, int UTC) {
     sregex_iterator begin = sregex_iterator(s.begin(), s.end(), number_format_regex), end = sregex_iterator();
     int milli, count = 0;
     vector<pair<int, int>> pair_vec;
