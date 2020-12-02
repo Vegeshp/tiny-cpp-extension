@@ -40,34 +40,26 @@ int basic_to_integer(const string &s) {
     return ans;
 }
 
-uint64_t TS::get_ts(bool to_milli, int UTC) {
-    return (duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() + UTC * 3600000ULL) / (to_milli ? 1 : 1000);
+uint64_t TimeUtil::now(int UTC) {
+    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() + UTC * 3600000ULL;
 }
 
-string TS::ts2s(uint64_t timestamp, bool is_milli) {
-    return ts2s(timestamp, default_time_format, is_milli);
-}
-
-uint64_t TS::s2ts(const string &s, bool to_milli, int UTC) {
-    return s2ts(s, default_time_format, to_milli, UTC);
-}
-
-string TS::ts2s(uint64_t timestamp, const string &format_string, bool is_milli) {
+string TimeUtil::ts2s(uint64_t timestamp, bool is_milli, const string &format_string) {
     if (!is_milli) {
         timestamp *= 1000;
     }
     const time_t const_time_point = system_clock::to_time_t(time_point<system_clock, milliseconds>(milliseconds(timestamp)));
-    tm time = *gmtime(&const_time_point);
-    map<char, int> mp = {{'Y', time.tm_year + 1900}, {'M', time.tm_mon + 1}, {'D', time.tm_mday}, {'h', time.tm_hour}, {'s', time.tm_sec}, {'W', time.tm_wday}};
+    tm time_struct = *gmtime(&const_time_point);
+    map<char, int> mp = {{'Y', time_struct.tm_year + 1900}, {'M', time_struct.tm_mon + 1}, {'D', time_struct.tm_mday}, {'h', time_struct.tm_hour}, {'s', time_struct.tm_sec}, {'W', time_struct.tm_wday}};
     string res = string(format_string);
     for (const string &s : formats) {
-        int index = 0;
+        size_t index = 0;
         if ((index = res.find(s)) != string::npos) {
             res.replace(index, s.size(), [&]() -> string {
                 if (s[1] == 'W') {
                     return (*format_string_map.find(s)).second.at(mp['W']);
                 } else if (s == "(m2)") {
-                    string res = to_string(time.tm_min);
+                    string res = to_string(time_struct.tm_min);
                     if (res.size() == 1) {
                         return '0' + res;
                     }
@@ -92,7 +84,7 @@ string TS::ts2s(uint64_t timestamp, const string &format_string, bool is_milli) 
     return res;
 }
 
-uint64_t TS::s2ts(const string &s, const string &format, bool to_milli, int UTC) {
+uint64_t TimeUtil::s2ts(const string &s, bool to_milli, int UTC, const string &format) {
     sregex_iterator begin = sregex_iterator(s.begin(), s.end(), number_format_regex), end = sregex_iterator();
     int milli, count = 0;
     vector<pair<int, int>> pair_vec;
