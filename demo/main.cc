@@ -20,13 +20,13 @@ int main() {
     cout << "======== New Format Again ========" << endl;
 
     string format = "Now the time is (M2)/(D2)/(Y4) (h2):(m2):(s2):(m3).";
-    s = TimeUtil::ts2s(ts, true, format); // number -> string
+    s = TimeUtil::ts2s(ts, format, true); // number -> string
     cout << s << endl;
-    ts = TimeUtil::s2ts(s, true, 8, format); // string -> number
+    ts = TimeUtil::s2ts(s, format, true, 8); // string -> number
     cout << ts << endl;
-    s = TimeUtil::ts2s(ts, true, format); // test number -> string again
+    s = TimeUtil::ts2s(ts, format, true); // test number -> string again
     cout << s << endl;
-    ts = TimeUtil::s2ts(s, true, 8, format); // test string -> number again
+    ts = TimeUtil::s2ts(s, format, true, 8); // test string -> number again
     cout << ts << endl;
     return 0;
 }
