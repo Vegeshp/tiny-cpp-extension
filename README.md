@@ -1,4 +1,6 @@
-# extended-cpp-util -- A tool for simplify C++ behavior implemented in modern C++
+# extended-cpp-util
+
+a tool for simplifying C++ behavior implemented in modern C++
 
 ## I. Purpose For This Project
 
