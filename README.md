@@ -1,5 +1,7 @@
 # extended-cpp-util
 
+[toc]
+
 a tool for simplifying C++ behavior implemented in modern C++
 
 ## I. Purpose For This Project
@@ -10,7 +12,7 @@ Intended for a deeper look into `'Modern' C++ Language Features`. The reason for
 
 Functions are divided into 2 parts now: time_util and ostream_util 
 
-1. time_util
+### 1. time_util
 
 The class definition is as follows:
 
@@ -65,6 +67,16 @@ Ws: what day in a week in short
 Wl: which day in a week ~~in long~~ in a complete expression
 
 Implementation is naive substitution, and the use of map and some round of traverse may cause a loss in mass acquisition. So performance can not be made sure of. 
+
+### 2. ostream_util
+
+This part is the most fancy one. 
+
+It can output pair, tuple, const-iterable stl or stl-like container with 5 major functions.
+
+However, the support class is comparative heavier. It implemented 3(more precise 6) test functions to test if a function or operator exists in a class, using SFINAE.  
+
+TODO: make container ostream operator implementation only accessible inside the header file.
 
 ## III. Way To Use
 
