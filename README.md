@@ -68,7 +68,7 @@ Implementation is naive substitution, and the use of map and some round of trave
 
 ## III. Way To Use
 
-### 0. What you need
+### What you need
 
 Nothing but a c++ compiler which supports `c++14` or higher standard.
 
@@ -76,7 +76,7 @@ Actually, `c++11` is also OK, but you need to make some changes: I use `std::ena
 
 see demo folder for more detail.
 
-### 4. other option
+### other option
 
 If the way to include this tool really annoyed you, you can simply dump all lines of code in a single file `xxxx.h`, then include it.
 
