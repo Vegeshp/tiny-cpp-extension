@@ -88,7 +88,7 @@ Please read thoroughly if you have no idea what **the license** is.
 
 ### 2. Robusticity
 
-Behavior is not guaranteed when an UB happened.
+Behavior is not guaranteed when a UB happened.
 
 ### 3. Correctness
 
