@@ -76,8 +76,6 @@ It can output pair, tuple, const-iterable stl or stl-like container with 5 major
 
 However, the support class is comparative heavier. It implemented 3(more precise 6) test functions to test if a function or operator exists in a class, using SFINAE.  
 
-TODO: make container ostream operator implementation only accessible inside the header file.
-
 ## III. Way To Use
 
 ### What you need
