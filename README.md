@@ -10,7 +10,7 @@ Intended for a deeper look into `'Modern' C++ Language Features`. The reason for
 
 ## II. Current Function
 
-Functions are divided into 2 parts now: time_util and ostream_util 
+Functions are divided into 3 parts now: time_util, ostream_util and random_util 
 
 ### 1. time_util
 
@@ -75,6 +75,16 @@ This part is the most fancy one.
 It can output pair, tuple, const-iterable stl or stl-like container with 5 major functions.
 
 However, the support class is comparative heavier. It implemented 3(more precise 6) test functions to test if a function or operator exists in a class, using SFINAE.  
+
+### 3. random_util
+
+This part is harder than I thought. 
+
+It is a method for generate discrete distribution according to the passed-in parameters. Usage is almost the same as `std::discrete_distribution<Tp>`. But the new method I wrote is not template-like, because it seems useless. I think now that we sample index, why not just use `size_t`? (
+
+Implementing this needs to know **alias method**, which is a good performance method. Arrangement referred to g++ implementation.
+
+// TODO: time consumption contrast with original implementation
 
 ## III. Way To Use
 

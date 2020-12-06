@@ -72,7 +72,7 @@ string TimeUtil::ts2s(uint64_t timestamp, const string &format_string, bool is_m
                     return res;
                 }
                 string res = to_string(mp[s[1]]);
-                int length = s[2] - '0';
+                unsigned length = s[2] - '0';
                 if (length <= res.size()) {
                     return res;
                 }
@@ -92,7 +92,7 @@ uint64_t TimeUtil::s2ts(const string &s, const string &format, bool to_milli, in
         if (type[1] == 'W') {
             break;
         }
-        int index;
+        size_t index;
         if ((index = format.find(type)) != string::npos) {
             pair_vec.emplace_back(index, ++count);
         }

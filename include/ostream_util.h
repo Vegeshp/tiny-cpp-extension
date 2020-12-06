@@ -7,7 +7,7 @@
 #include <utility>
 
 // output pair<T, S>, tuple<A, B, ...>, container that supports iterator begin, end.
-namespace impl_detail {
+namespace __detail {
 
 template <typename _Tp>
 struct ContainerUtil {
@@ -21,14 +21,6 @@ struct ContainerUtil {
     constexpr static std::false_type test_const_iterable(...);
 
     template <typename _Type>
-    constexpr static std::true_type test_const_reverse_iterable(typename _Type::const_reverse_iterator *,
-                                                                decltype(&_Type::crbegin),
-                                                                decltype(&_Type::crend));
-
-    template <typename _Type>
-    constexpr static std::false_type test_const_reverse_iterable(...);
-
-    template <typename _Type>
     constexpr static decltype(std::declval<std::ostream &>() << std::declval<_Type>()) test_ostream_operator(_Type *x);
 
     template <typename _Type>
@@ -37,10 +29,6 @@ struct ContainerUtil {
    public:
     constexpr static bool is_const_iterable() noexcept {
         return std::is_same<std::true_type, decltype(test_const_iterable<_Tp>(nullptr, nullptr, nullptr))>{}();
-    }
-
-    constexpr static bool is_const_reverse_iterable() noexcept {
-        return std::is_same<std::true_type, decltype(test_const_reverse_iterable<_Tp>(nullptr, nullptr, nullptr))>{}();
     }
 
     constexpr static bool have_ostream_operator() noexcept {
@@ -52,7 +40,7 @@ template <typename _Container>
 constexpr typename std::enable_if_t<!ContainerUtil<_Container>::have_ostream_operator(), std::ostream &>
 ostream_container_impl(std::ostream &os, const _Container &v, typename _Container::const_iterator cit) noexcept;
 
-};  // namespace impl_detail
+};  // namespace __detail
 
 // declaration
 
@@ -68,7 +56,7 @@ constexpr typename std::enable_if_t<(_size < sizeof...(_Args)), std::ostream &>
 operator<<(std::ostream &os, const std::tuple<_Args...> &t) noexcept;
 
 template <typename _Container>
-constexpr typename std::enable_if_t<!impl_detail::ContainerUtil<_Container>::have_ostream_operator(), std::ostream &>
+constexpr typename std::enable_if_t<!__detail::ContainerUtil<_Container>::have_ostream_operator(), std::ostream &>
 operator<<(std::ostream &os, const _Container &v) noexcept;
 
 // implementation
@@ -103,14 +91,14 @@ operator<<(std::ostream &os, const std::tuple<_Args...> &t) noexcept {
 // We cannot just implement inside, since binary operator cannot hide more parameter in one function, so a helper
 // function is necessary
 template <typename _Container>
-constexpr typename std::enable_if_t<!impl_detail::ContainerUtil<_Container>::have_ostream_operator(), std::ostream &>
+constexpr typename std::enable_if_t<!__detail::ContainerUtil<_Container>::have_ostream_operator(), std::ostream &>
 operator<<(std::ostream &os, const _Container &v) noexcept {
-    return impl_detail::ostream_container_impl(os << '{', v, std::cbegin(v)) << '}';
+    return __detail::ostream_container_impl(os << '{', v, std::cbegin(v)) << '}';
 }
 
 template <typename _Container>
-constexpr typename std::enable_if_t<!impl_detail::ContainerUtil<_Container>::have_ostream_operator(), std::ostream &>
-impl_detail::ostream_container_impl(std::ostream &os,
+constexpr typename std::enable_if_t<!__detail::ContainerUtil<_Container>::have_ostream_operator(), std::ostream &>
+__detail::ostream_container_impl(std::ostream &os,
                                     const _Container &v,
                                     typename _Container::const_iterator cit) noexcept {
     // this is a [cbegin, cend) recursive one-function implementation.
