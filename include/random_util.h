@@ -121,6 +121,7 @@ struct DiscreteDistribution {
             }
             while (!_small.empty()) {
                 size_t l = _small.front();
+                _small.pop();
                 _M_fake_prob[l] = 1;
             }
 
