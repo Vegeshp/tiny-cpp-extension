@@ -9,5 +9,4 @@ $cc ostream.cc -I ./../include -O2 -std=c++14 -o $out
 printf '\n'
 $cc random.cc -I ./../include -O2 -std=c++14 -o $out
 ./$out
-printf '\n'
 rm *.out
