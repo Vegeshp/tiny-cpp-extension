@@ -119,5 +119,5 @@ uint64_t TimeUtil::s2ts(const string &s, const string &format, bool to_milli, in
     }
     vector<int *>().swap(vec);
     vector<pair<int, int>>().swap(pair_vec);
-    return static_cast<uint64_t>(mktime(&t) * 1000ULL + milli + UTC * 3600000LL) / (to_milli ? 1 : 1000);
+    return static_cast<uint64_t>(mktime(&t) * 1000LL + milli + UTC * 3600000LL) / (to_milli ? 1 : 1000);
 }
