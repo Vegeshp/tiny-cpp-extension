@@ -41,7 +41,7 @@ int basic_to_integer(const string &s) {
 }
 
 uint64_t TimeUtil::now(int UTC) {
-    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() + UTC * 3600000ULL;
+    return static_cast<uint64_t>(duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() + UTC * 3600000LL);
 }
 
 string TimeUtil::ts2s(uint64_t timestamp, const string &format_string, bool is_milli) {
@@ -119,5 +119,5 @@ uint64_t TimeUtil::s2ts(const string &s, const string &format, bool to_milli, in
     }
     vector<int *>().swap(vec);
     vector<pair<int, int>>().swap(pair_vec);
-    return (mktime(&t) * 1000ULL + milli + UTC * 3600000ULL) / (to_milli ? 1 : 1000);
+    return static_cast<uint64_t>(mktime(&t) * 1000ULL + milli + UTC * 3600000LL) / (to_milli ? 1 : 1000);
 }
