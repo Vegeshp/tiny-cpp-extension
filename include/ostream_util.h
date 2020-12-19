@@ -69,7 +69,7 @@ constexpr std::ostream &operator<<(std::ostream &os, const std::pair<_T1, _T2> &
 template <size_t _size, typename... _Args>
 constexpr typename std::enable_if_t<(_size >= sizeof...(_Args)), std::ostream &>
 operator<<(std::ostream &os, const std::tuple<_Args...> &t) noexcept {
-    return os;
+    return os << (sizeof...(_Args) == 0 ? "<>" : "");
 }
 
 template <size_t _size, typename... _Args>
