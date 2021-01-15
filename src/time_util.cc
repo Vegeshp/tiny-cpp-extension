@@ -49,7 +49,8 @@ string TimeUtil::ts2s(uint64_t timestamp, const string &format_string, bool is_m
         timestamp *= 1000;
     }
     const time_t const_time_point = system_clock::to_time_t(time_point<system_clock, milliseconds>(milliseconds(timestamp)));
-    tm time_struct = *gmtime(&const_time_point);
+    tm time_struct;
+    gmtime_r(&const_time_point, &time_struct);
     map<char, int> mp = {{'Y', time_struct.tm_year + 1900}, {'M', time_struct.tm_mon + 1}, {'D', time_struct.tm_mday}, {'h', time_struct.tm_hour}, {'s', time_struct.tm_sec}, {'W', time_struct.tm_wday}};
     string res = string(format_string);
     for (const string &s : formats) {
