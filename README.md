@@ -94,7 +94,7 @@ Prerequisitive:
 have either `c++filt` from `binutils` or `libc++abi`.
 
 Guide:
-If you have `c++filt` correctly installed on your system, simply compile adding `-DFILT` flag, then use `./a.out | c++filt -t`. Or more easily, if you have `libc++abi`, just compile and run normally.
+If you have `c++filt` correctly installed on your system, simply compile adding `-DFILT` flag, then use `./a.out | c++filt -t`. Or more easily, if you have `libc++abi` installed, just compile and run normally.
 
 ## III. Way To Use
 
