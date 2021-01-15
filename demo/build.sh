@@ -16,4 +16,4 @@ printf '\n'
 $cc type.cc -I ./../include -O2 -std=c++14 -o $out -Wall -Werror -DFILT
 ./$out | c++filt -t
 
-rm *.out
+rm ./*.out
