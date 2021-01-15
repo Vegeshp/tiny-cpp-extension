@@ -10,7 +10,7 @@ Intended for a deeper look into `'Modern' C++ Language Features`. The reason for
 
 ## II. Current Function
 
-Functions are divided into 3 parts now: time_util, ostream_util and random_util 
+Functions are divided into 4 parts now: time_util, ostream_util, random_util and type_util
 
 ### 1. time_util
 
@@ -85,6 +85,16 @@ It is a method for generate discrete distribution according to the passed-in par
 Implementing this needs to know **alias method**, which is a good performance method. Arrangement referred to g++ implementation.
 
 // TODO: time consumption contrast with original implementation
+
+### 4. type_util
+
+Use libc++abi to output the `RealType` of a type. Better than `typeid().name()` via `c++filt -t`, it can show l/rvalue reference and both bottom-level top-level const-volatile qualifier. Meanwhile, instead of showing scary order of type decorator, it uses the widest order, like `const type * const`, rather than `type const * const`. For more detail, see `demo/type.cc`.
+
+Prerequisitive:
+have either `c++filt` from `binutils` or `libc++abi`.
+
+Guide:
+If you have `c++filt` correctly installed on your system, simply compile adding `-DFILT` flag, then use `./a.out | c++filt -t`. Or more easily, if you have `libc++abi`, just compile and run normally.
 
 ## III. Way To Use
 
