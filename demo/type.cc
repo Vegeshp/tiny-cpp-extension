@@ -2,7 +2,7 @@
 
 template <typename T>
 void test() {
-    std::cout << ++count << '\t' << get_name<T>() << std::endl;
+    std::cout << ++count << '\t' << __detail::get_name<T>() << std::endl;
     if (!(count & 3)) {
         std::cout << std::endl;
     }
@@ -38,29 +38,29 @@ int main() {
     test<const volatile int* volatile>();        // 19
     test<const volatile int* const volatile>();  // 20
 
-    test<int[3]>();
-    test<int(*)[3]>();
-    test<int(&)[3]>();
-    test<int(&&)[3]>();
-    test<int(*&)[3]>();
-    test<int(*&&)[3]>();
-    test<int&>();
-    test<int&&>();
+    test<int[3]>();       // 21
+    test<int(*)[3]>();    // 22
+    test<int(&)[3]>();    // 23
+    test<int(&&)[3]>();   // 24
+    test<int(*&)[3]>();   // 25
+    test<int(*&&)[3]>();  // 26
+    test<int&>();         // 27
+    test<int&&>();        // 28
 
     auto f = [](int a, bool b, char c) -> bool { return true; };
     auto g = [](int a, double b) -> int { return 0; };
     int cmp(int, int);
     bool check(int, double, long long);
 
-    test<decltype(f)>();
-    test<decltype(g)>();
-    test<decltype(cmp)>();
-    test<decltype(check)>();
+    test<decltype(f)>();      // 29
+    test<decltype(g)>();      // 30
+    test<decltype(cmp)>();    // 31
+    test<decltype(check)>();  // 32
 
-    test<decltype(&f)>();
-    test<decltype(&g)>();
-    test<decltype(&cmp)>();
-    test<decltype(&check)>();
+    test<decltype(&f)>();      // 33
+    test<decltype(&g)>();      // 34
+    test<decltype(&cmp)>();    // 35
+    test<decltype(&check)>();  // 36
 
     int (*cmp1)(int, int);
     int (*cmp2)();
@@ -68,11 +68,18 @@ int main() {
     int (*&cmp4)() = cmp2;
     int(&&cmp5)(int, int) = std::move(cmp3);
     int (*&&cmp6)() = std::move(cmp4);
-    test<decltype(cmp1)>();
-    test<decltype(cmp2)>();
-    test<decltype(cmp3)>();
-    test<decltype(cmp4)>();
-    test<decltype(cmp5)>();
-    test<decltype(cmp6)>();
+    void (*base1)() = []() {};
+    void (*base2)(int, int) = [](int a, int b) {};
+
+    test<decltype(cmp1)>();  // 37
+    test<decltype(cmp2)>();  // 38
+    test<decltype(cmp3)>();  // 39
+    test<decltype(cmp4)>();  // 40
+
+    test<decltype(cmp5)>();   // 41
+    test<decltype(cmp6)>();   // 42
+    test<decltype(base1)>();  // 43
+    test<decltype(base2)>();  // 44
+
     return 0;
 }
