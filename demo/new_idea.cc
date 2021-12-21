@@ -3,7 +3,7 @@
 #include <utility>
 #include <vector>
 
-#include "ostream_util.h"
+#include "ostream_ops.h"
 
 // thanks for slongle's demand
 
@@ -26,6 +26,6 @@ Foo from_vec(const std::vector<T> &a) {
 }
 
 int main() {
-    Foo(from_vec<int, 5>(std::vector<int>{1, 1, 2, 3, 5}));
+    [](Foo) {}(Foo(from_vec<int, 5>(std::vector<int>{1, 1, 2, 3, 5})));
     return 0;
 }
