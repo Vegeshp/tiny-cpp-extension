@@ -1,4 +1,4 @@
-# extended-cpp-util
+# Tiny C++ Extension
 
 [toc]
 
