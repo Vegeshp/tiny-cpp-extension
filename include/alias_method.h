@@ -126,11 +126,8 @@ struct AliasMethod {
                 fake_prob[l] = 1;
             }
 
-            m_dis.reserve(size);
-            std::transform(fake_prob.begin(), fake_prob.end(), std::back_inserter(m_dis),
-                           [&](double x) -> std::bernoulli_distribution {
-                               return std::bernoulli_distribution{x};
-                           });
+            m_dis.resize(size);
+            std::transform(fake_prob.begin(), fake_prob.end(), m_dis.begin(), [&](double x) { return std::bernoulli_distribution{x}; });
 
             std::vector<double>().swap(scaled);
             std::vector<double>().swap(fake_prob);
