@@ -17,7 +17,7 @@ See [Darts, Dice, and Coins: Sampling from a Discrete Distribution
 
 For container `cont` of type `Container`, if every element in it can be output via ostream operator, and `cont` itself is *const-iterable* (which means `std::cbegin(cont)` and `std::cend(cont)` is implemented).
 
-Implemented using *SFINAE*, which means *Substitution Failure Is Not An Error*. By providing multiple possible overload but only one resolution is passed, we can use this overload resolution to execute.
+Implemented using *SFINAE*, which means *Substitution Failure Is Not An Error*. By providing multiple possible overload but only one resolution is passed, we can use this overload resolution to avoid multiple function overloads.
 
 Currently, ostream operator for `std::tuple`, `std::vector` and other std-defined containers is valid.
 
