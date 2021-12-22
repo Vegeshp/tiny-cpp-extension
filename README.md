@@ -25,6 +25,6 @@ Currently, ostream operator for `std::tuple`, `std::vector` and other std-define
 
 Actually, in the beginning template partial specialization is used. However it cannot solve occasion when cv-qualifiers are involved, top-level and low-level of which is vexing. Also, pointer, reference of array is some kind of hard.
 
-Using extension `__PRETTY_FUNCTION__` of gcc and clang is a good idea. There's also a macro `__MSCSIG__` for MSVC, but I haven't explored it.
+Using extension `__PRETTY_FUNCTION__` of gcc and clang is a good idea. There's also a macro `__FUNCSIG__` for MSVC, but I haven't explored it.
 
 Simple character finding is ok. Macro `from_type` and `from_var` are provided.
