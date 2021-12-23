@@ -5,7 +5,7 @@
 
 #include "ostream_ops.h"
 
-// thanks for slongle's demand
+// thanks for slongle's need
 
 struct Foo {
     template <typename... Args>
