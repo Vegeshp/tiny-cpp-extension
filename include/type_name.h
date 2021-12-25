@@ -25,7 +25,23 @@ struct TypeName {
     }
 };
 
-#define from_type(x) TypeName<x>::name()
-#define from_var(x) TypeName<decltype(x)>::name()
+template <typename T>
+std::string overloaded(T& x) {
+    return "glvalue";
+}
+
+template <typename T>
+std::string overloaded(T&& x) {
+    return "rvalue";
+}
+
+template <typename T>
+std::string get_category(T&& x) {
+    return overloaded(std::forward<T>(x));
+}
+
+#define type(x) TypeName<x>::name()
+#define var_type(x) TypeName<decltype(x)>::name()
+#define category_type(x) get_category(x)
 
 #endif  // TYPE_NAME_H_
