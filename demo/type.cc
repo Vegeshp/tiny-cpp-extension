@@ -50,5 +50,6 @@ int main() {
         std::cout << var_type(cpa) << ", " << category_type(cpa) << std::endl;
         std::cout << var_type(cpcpa) << ", " << category_type(cpcpa) << std::endl;
     }
+    std::cout << var_type(nullptr) << ", " << category_type(nullptr) << std::endl;
     return 0;
 }
