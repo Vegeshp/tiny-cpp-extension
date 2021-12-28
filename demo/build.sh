@@ -1,6 +1,6 @@
 cc=g++
 out=a.out
-version=c++11
+version=c++17
 
 $cc ostream.cc -I ./../include -O2 -std=$version -o $out -Wall -Werror
 ./$out

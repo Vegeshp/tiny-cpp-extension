@@ -3,6 +3,7 @@
 #ifndef OSTREAM_OPS_H_
 #define OSTREAM_OPS_H_
 
+#include <fstream>
 #include <iostream>     // std::ostream
 #include <iterator>     // std::cbegin std::cend
 #include <tuple>        // std::tuple std::get
@@ -139,7 +140,15 @@ operator<<(std::ostream &os, const Container &cont) {
     auto it_end = END(cont);
     os << '{';
     while (it_begin != it_end) {
+#if __cplusplus >= 201700L  // C++17 or newer
+        if constexpr (std::is_array_v<std::remove_pointer_t<decltype(it_begin)>>) {
+            os << array_wrapper(*it_begin);
+        } else {
+            os << *it_begin;
+        }
+#else
         os << *it_begin;
+#endif
         ++it_begin;
         if (it_begin != it_end) {
             os << ", ";
